@@ -5,7 +5,11 @@ const app = express();
 app.use(express.json());
 
 const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri);
+const client = new MongoClient(uri, { 
+  tls: true,
+  tlsAllowInvalidCertificates: false,
+  serverSelectionTimeoutMS: 30000 
+});
 
 async function startServer() {
   try {
