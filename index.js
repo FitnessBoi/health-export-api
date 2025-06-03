@@ -5,11 +5,7 @@ const app = express();
 app.use(express.json());
 
 const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri, { 
-  tls: true,
-  tlsAllowInvalidCertificates: false,
-  serverSelectionTimeoutMS: 30000 
-});
+const client = new MongoClient(uri, { tls: true, serverSelectionTimeoutMS: 30000 });
 
 async function startServer() {
   try {
@@ -32,7 +28,7 @@ async function startServer() {
       }
     });
 
-    app.listen(process.env.PORT || 3000, () => console.log('Server running'));
+    app.listen(process.env.PORT, () => console.log('Server running'));
   } catch (e) {
     console.error('Failed to connect to MongoDB:', e);
   }
