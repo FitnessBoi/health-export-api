@@ -1,1 +1,14 @@
-echo '{"functions": {"index.js": {"memory": 128, "maxDuration": 10}}, "rewrites": [{"source": "/(.*)", "destination": "/index.js"}]}' > vercel.json
+{
+  "functions": {
+    "index.js": {
+      "memory": 128,
+      "maxDuration": 10
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.js"
+    }
+  ]
+}
