@@ -1,8 +1,12 @@
 {
   "rewrites": [
     {
+      "source": "/health-data",
+      "destination": "/api/index.js"
+    },
+    {
       "source": "/(.*)",
-      "destination": "/index.js"
+      "destination": "/api/index.js"
     }
   ]
 }
