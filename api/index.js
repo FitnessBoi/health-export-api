@@ -1,37 +1,26 @@
-const express = require('express');
 const { MongoClient } = require('mongodb');
-require('dotenv').config();
-const app = express();
-app.use(express.json());
 
 const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri, { tls: true, serverSelectionTimeoutMS: 30000 });
+const client = new MongoClient(uri, { serverSelectionTimeoutMS: 30000 });
 
-async function startServer() {
+module.exports = async (req, res) => {
+  if (req.method !== 'POST') {
+    return res.status(405).send('Method Not Allowed');
+  }
+
+  const apiKey = req.headers['authorization'];
+  if (apiKey !== 'Bearer HealthDataSecure2025') {
+    return res.status(403).send('Forbidden');
+  }
+
   try {
     await client.connect();
-    console.log('Connected to MongoDB');
-
-    app.post('/health-data', async (req, res) => {
-      const apiKey = req.headers['authorization'];
-      if (apiKey !== 'Bearer HealthDataSecure2025') {
-        return res.status(403).send('Forbidden');
-      }
-      try {
-        const db = client.db('lifestyle_db');
-        await db.collection('Apple Health').insertOne(req.body);
-        res.status(200).send('Data saved');
-      } catch (e) {
-        res.status(500).send('Error');
-      } finally {
-        await client.close();
-      }
-    });
-
-    app.listen(process.env.PORT, () => console.log('Server running'));
+    const db = client.db('lifestyle_db');
+    await db.collection('Apple Health').insertOne(req.body);
+    res.status(200).send('Data saved');
   } catch (e) {
-    console.error('Failed to connect to MongoDB:', e);
+    res.status(500).send('Error');
+  } finally {
+    await client.close();
   }
-}
-
-startServer();
+};
