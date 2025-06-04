@@ -3,10 +3,6 @@
     {
       "source": "/health-data",
       "destination": "/api/index.js"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/api/index.js"
     }
   ]
 }
